@@ -1,5 +1,10 @@
 package com.calculafacil;
 
+import com.calculafacil.controller.CalculatorController;
+import com.calculafacil.model.BlackBodyRadiationModel;
+import com.calculafacil.view.CalculatorView;
+import javax.swing.SwingUtilities;
+
 /**
  * Punto de entrada de la aplicación.
  *
@@ -13,6 +18,11 @@ public final class App {
     }
 
     public static void main(String[] args) {
-        // La lógica de la aplicación se agregará en una etapa posterior.
+        SwingUtilities.invokeLater(() -> {
+            CalculatorView view = new CalculatorView();
+            new CalculatorController(new BlackBodyRadiationModel(), view);
+            view.frame().setLocationByPlatform(true);
+            view.frame().setVisible(true);
+        });
     }
 }

@@ -1,0 +1,20 @@
+tasks:
+  - id: T008
+    status: completed
+    evidence:
+      - src/main/java/com/calculafacil/view/CalculatorView.java
+      - src/main/java/com/calculafacil/controller/CalculatorController.java
+  - id: T009
+    status: completed
+    evidence:
+      - src/main/java/com/calculafacil/view/SpectrumChartPanel.java
+  - id: T010
+    status: completed
+    evidence:
+      - src/main/java/com/calculafacil/view/CalculatorView.java
+      - src/main/java/com/calculafacil/controller/CalculatorController.java
+  - id: T011
+    status: completed
+    evidence:
+      - src/main/java/com/calculafacil/App.java
+      - src/main/java/com/calculafacil/controller/CalculatorController.java

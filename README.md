@@ -28,8 +28,31 @@ src/
 - **View**: contendrá la interfaz con la persona usuaria.
 - **Controller**: coordinará los eventos de la vista y las operaciones del modelo.
 
-La lógica física y la tecnología concreta de la interfaz se definirán en etapas
-posteriores.
+La lógica física está desacoplada de la interfaz Swing. La primera interfaz
+permite seleccionar temperatura y unidad, cargar presets, ajustar emisividad,
+superponer curvas y consultar la verificación numérica de Stefan-Boltzmann.
+
+## Interfaz inicial
+
+Ejecutar desde Maven:
+
+```bash
+mvn package
+java -jar target/calculadora-cuerpo-negro-0.1.0-SNAPSHOT.jar
+```
+
+En la ventana:
+
+- Selecciona un preset o introduce una temperatura en K, °C o °F.
+- Ajusta la emisividad `ε` entre 0 y 1 para explorar cuerpos grises.
+- Pulsa **Agregar curva** para superponer temperaturas.
+- Cambia la unidad del eje entre m, µm y nm.
+- Consulta la integral numérica y el valor teórico de Stefan-Boltzmann en la
+  barra inferior.
+
+La gráfica actual representa `Bλ` en función de la longitud de onda. Las
+curvas se calculan internamente en unidades SI y solo se convierten para su
+presentación.
 
 ## Comandos Maven
 
