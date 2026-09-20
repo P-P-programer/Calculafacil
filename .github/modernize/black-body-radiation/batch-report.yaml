@@ -1,0 +1,26 @@
+batch: foundation-physics
+status: completed
+tasks:
+  - T001
+  - T002
+  - T003
+  - T004
+  - T005
+  - T006
+  - T007
+tests:
+  command: mvn test
+  result: passed
+  tests_run: 6
+  failures: 0
+  errors: 0
+build:
+  command: mvn package -DskipTests
+  result: passed
+notes:
+  - "La verificación de Stefan-Boltzmann multiplica la integral de B_lambda por pi porque B_lambda es radiancia por estereorradian."
+next_batch:
+  - T008
+  - T009
+  - T010
+  - T011

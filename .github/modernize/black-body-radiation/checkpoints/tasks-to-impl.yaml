@@ -1,0 +1,35 @@
+tasks:
+  - id: T001
+    status: completed
+    evidence:
+      - src/main/java/com/calculafacil/model/PhysicalConstants.java
+      - src/main/java/com/calculafacil/model/Temperature.java
+      - src/main/java/com/calculafacil/model/SpectrumCurve.java
+  - id: T002
+    status: completed
+    evidence:
+      - src/main/java/com/calculafacil/model/LengthUnit.java
+      - src/main/java/com/calculafacil/model/FrequencyUnit.java
+      - src/main/java/com/calculafacil/model/TemperatureUnit.java
+  - id: T003
+    status: completed
+    evidence:
+      - pom.xml
+      - src/test/java/com/calculafacil/PhysicsTest.java
+  - id: T004
+    status: completed
+    evidence:
+      - src/main/java/com/calculafacil/service/SpectralRadianceCalculator.java
+  - id: T005
+    status: completed
+    evidence:
+      - src/main/java/com/calculafacil/service/SpectrumSampler.java
+      - src/main/java/com/calculafacil/service/NumericalIntegrator.java
+  - id: T006
+    status: completed
+    evidence:
+      - src/main/java/com/calculafacil/service/StefanBoltzmannVerifier.java
+  - id: T007
+    status: completed
+    evidence:
+      - src/main/java/com/calculafacil/model/TemperaturePreset.java

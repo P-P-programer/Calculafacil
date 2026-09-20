@@ -1,0 +1,23 @@
+requirements:
+  - id: REQ-001
+    plan_items: [P2.2, P2.3, P3.2]
+  - id: REQ-002
+    plan_items: [P1.2, P3.1]
+  - id: REQ-003
+    plan_items: [P2.1, P3.2]
+  - id: REQ-004
+    plan_items: [P2.3, P3.1]
+  - id: REQ-005
+    plan_items: [P4.1]
+  - id: REQ-006
+    plan_items: [P2.2, P3.3, P4.2]
+  - id: REQ-007
+    plan_items: [P2.1, P3.1, P4.2]
+  - id: REQ-008
+    plan_items: [P2.2, P4.2]
+  - id: REQ-009
+    plan_items: [P3.2, P3.3, P4.3]
+  - id: REQ-010
+    plan_items: [P1.2, P2.1, P4.2]
+  - id: REQ-011
+    plan_items: [P1.1, P2.1, P4.2]
