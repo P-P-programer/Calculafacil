@@ -41,6 +41,27 @@ mvn package
 java -jar target/calculadora-cuerpo-negro-0.1.0-SNAPSHOT.jar
 ```
 
+## Descargas para usuarios
+
+Cada vez que se publica un tag con formato `v*`, GitHub Actions compila y
+publica una versión portable para Windows, Linux y macOS en
+[Releases](https://github.com/P-P-programer/Calculafacil/releases).
+
+Estas versiones incluyen un runtime de Java mediante `jpackage`, por lo que la
+persona usuaria no necesita instalar Java. En Windows y Linux se descarga el
+archivo de la plataforma y se ejecuta `CalculaFacil` dentro de la carpeta
+extraída. En macOS se abre el archivo `.app` extraído.
+
+Para publicar una versión:
+
+```bash
+git tag v0.1.0
+git push origin v0.1.0
+```
+
+El workflow ejecuta primero las pruebas Maven y solo publica el Release si
+Windows, Linux y macOS terminan correctamente.
+
 En la ventana:
 
 - Selecciona un preset o introduce una temperatura en K, °C o °F.
