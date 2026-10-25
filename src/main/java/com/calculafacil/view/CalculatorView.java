@@ -14,6 +14,7 @@ import java.text.DecimalFormat;
 import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -37,6 +38,10 @@ public class CalculatorView {
     private final JButton calculate = new JButton("Agregar curva");
     private final JButton clear = new JButton("Limpiar");
     private final JLabel verification = new JLabel("Añade una curva para ver la verificación.");
+    private final JCheckBox showPlanck = new JCheckBox("Planck", true);
+    private final JCheckBox showRayleighJeans = new JCheckBox("Rayleigh-Jeans");
+    private final JCheckBox showWien = new JCheckBox("Wien clásica");
+    private final JLabel peak = new JLabel("λmax: --");
 
     public CalculatorView() {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -75,6 +80,12 @@ public class CalculatorView {
         c.gridy = 6;
         panel.add(buttons, c);
         c.gridy = 7;
+        JPanel laws = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        laws.add(showPlanck);
+        laws.add(showRayleighJeans);
+        laws.add(showWien);
+        panel.add(laws, c);
+        c.gridy = 8;
         panel.add(status, c);
         return panel;
     }
@@ -91,6 +102,7 @@ public class CalculatorView {
     private JPanel createResults() {
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         panel.setBorder(BorderFactory.createTitledBorder("Verificación de Stefan-Boltzmann"));
+        panel.add(peak);
         panel.add(verification);
         return panel;
     }
@@ -137,6 +149,22 @@ public class CalculatorView {
 
     public JTextArea status() {
         return status;
+    }
+
+    public JCheckBox showPlanck() {
+        return showPlanck;
+    }
+
+    public JCheckBox showRayleighJeans() {
+        return showRayleighJeans;
+    }
+
+    public JCheckBox showWien() {
+        return showWien;
+    }
+
+    public JLabel peak() {
+        return peak;
     }
 
     public void showCurves(List<SpectrumCurve> curves, LengthUnit unit) {

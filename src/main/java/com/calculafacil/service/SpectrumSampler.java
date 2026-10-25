@@ -32,4 +32,9 @@ public final class SpectrumSampler {
         return sample(name, minimum, maximum, samples,
                 wavelength -> calculator.planckByWavelength(wavelength, temperature, emissivity));
     }
+
+    public SpectrumCurve sampleWavelength(String name, double minimum, double maximum,
+            int samples, java.util.function.DoubleUnaryOperator function) {
+        return sample(name, minimum, maximum, samples, function);
+    }
 }

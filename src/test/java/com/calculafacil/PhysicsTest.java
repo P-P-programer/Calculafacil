@@ -54,6 +54,19 @@ class PhysicsTest {
     }
 
     @Test
+    void wavelengthPeakUsesWienDisplacementLaw() {
+        assertEquals(501.4e-9, calculator.wavelengthPeak(new Temperature(5778.0)), 1.0e-9);
+    }
+
+    @Test
+    void historicalApproximationsAreFiniteAndNonNegative() {
+        double wavelength = 500e-9;
+        var temperature = new Temperature(5778.0);
+        assertTrue(calculator.rayleighJeansByWavelength(wavelength, temperature, blackBody) > 0.0);
+        assertTrue(calculator.wienByWavelength(wavelength, temperature, blackBody) > 0.0);
+    }
+
+    @Test
     void integrationApproachesStefanBoltzmann() {
         var temperature = new Temperature(5778);
         var curve = new SpectrumSampler().samplePlanckWavelength(

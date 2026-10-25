@@ -9,6 +9,8 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.util.ArrayList;
 import java.util.List;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import javax.swing.JPanel;
 
 public final class SpectrumChartPanel extends JPanel {
@@ -19,10 +21,24 @@ public final class SpectrumChartPanel extends JPanel {
     };
     private List<SpectrumCurve> curves = List.of();
     private LengthUnit unit = LengthUnit.NANOMETER;
+    private double zoom = 1.0;
+    private int pointerX = -1;
 
     public SpectrumChartPanel() {
         setBackground(Color.WHITE);
         setBorder(javax.swing.BorderFactory.createTitledBorder("Radiancia espectral de Planck"));
+        setToolTipText("");
+        addMouseWheelListener(event -> {
+            zoom = Math.max(1.0, Math.min(8.0, zoom * (event.getWheelRotation() < 0 ? 1.2 : 1 / 1.2)));
+            repaint();
+        });
+        addMouseMotionListener(new MouseAdapter() {
+            @Override
+            public void mouseMoved(MouseEvent event) {
+                pointerX = event.getX();
+                setToolTipText(tooltip(event.getX(), event.getY()));
+            }
+        });
     }
 
     public void setCurves(List<SpectrumCurve> curves, LengthUnit unit) {
@@ -54,16 +70,25 @@ public final class SpectrumChartPanel extends JPanel {
             g.dispose();
             return;
         }
-        double minX = curves.stream().flatMap(curve -> curve.points().stream())
+        double dataMinX = curves.stream().flatMap(curve -> curve.points().stream())
                 .mapToDouble(point -> unit.fromMeters(point.independentValue())).min().orElse(0);
-        double maxX = curves.stream().flatMap(curve -> curve.points().stream())
+        double dataMaxX = curves.stream().flatMap(curve -> curve.points().stream())
                 .mapToDouble(point -> unit.fromMeters(point.independentValue())).max().orElse(1);
+        double centerX = pointerX > left && pointerX < left + width
+                ? dataMinX + (pointerX - left) * (dataMaxX - dataMinX) / width
+                : (dataMinX + dataMaxX) / 2.0;
+        double visibleWidth = (dataMaxX - dataMinX) / zoom;
+        double minX = Math.max(dataMinX, centerX - visibleWidth / 2.0);
+        double maxX = Math.min(dataMaxX, centerX + visibleWidth / 2.0);
         double maxY = curves.stream().flatMap(curve -> curve.points().stream())
                 .mapToDouble(point -> point.radiance()).max().orElse(1);
         for (int curveIndex = 0; curveIndex < curves.size(); curveIndex++) {
             SpectrumCurve curve = curves.get(curveIndex);
             g.setColor(COLORS[curveIndex % COLORS.length]);
-            g.setStroke(new BasicStroke(2f));
+            float[] dash = curve.name().contains("Rayleigh") ? new float[]{8f, 5f}
+                    : curve.name().contains("Wien") ? new float[]{3f, 4f} : null;
+            g.setStroke(dash == null ? new BasicStroke(2f) : new BasicStroke(2f,
+                    BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND, 1f, dash, 0f));
             var points = new ArrayList<java.awt.Point>();
             curve.points().forEach(point -> points.add(new java.awt.Point(
                     left + (int) ((unit.fromMeters(point.independentValue()) - minX) / (maxX - minX) * width),
@@ -76,5 +101,31 @@ public final class SpectrumChartPanel extends JPanel {
             g.drawString(curve.name(), left + 28, top + 16 + curveIndex * 20);
         }
         g.dispose();
+    }
+
+    private String tooltip(int x, int y) {
+        if (curves.isEmpty()) {
+            return null;
+        }
+        int left = 75;
+        int width = getWidth() - left - 25;
+        if (x < left || x > left + width) {
+            return null;
+        }
+        double min = curves.stream().flatMap(curve -> curve.points().stream())
+                .mapToDouble(point -> unit.fromMeters(point.independentValue())).min().orElse(0);
+        double max = curves.stream().flatMap(curve -> curve.points().stream())
+                .mapToDouble(point -> unit.fromMeters(point.independentValue())).max().orElse(1);
+        double value = min + (x - left) * (max - min) / width;
+        StringBuilder text = new StringBuilder(String.format("λ ≈ %.3g %s", value, unit.symbol()));
+        for (SpectrumCurve curve : curves) {
+            var closest = curve.points().stream().min((a, b) -> Double.compare(
+                    Math.abs(unit.fromMeters(a.independentValue()) - value),
+                    Math.abs(unit.fromMeters(b.independentValue()) - value))).orElse(null);
+            if (closest != null) {
+                text.append(String.format(" | %s: %.3g", curve.name(), closest.radiance()));
+            }
+        }
+        return "<html>" + text + "</html>";
     }
 }

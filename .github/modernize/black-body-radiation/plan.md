@@ -206,32 +206,58 @@ src/test/java/com/calculafacil/
 
 ## Tareas
 
+### Estado actual de la implementación
+
+La entrega inicial está completada para las tareas T001–T005, T007–T009 y T011:
+
+- El dominio físico, las conversiones y las leyes espectrales están implementados
+  y cubiertos por tests.
+- La interfaz Swing permite agregar y superponer curvas de Planck, usar presets,
+  cambiar unidades y emisividad, limpiar la gráfica y consultar la verificación
+  de Stefan-Boltzmann.
+- El pipeline de distribución portable para Windows y Linux está implementado en
+  `.github/workflows/release.yml`. macOS queda fuera temporalmente porque el
+  runner no estuvo disponible; no bloquea la publicación de las otras plataformas.
+- `README.md` ya documenta ejecución local y descargas desde Releases, pero la
+  ayuda integrada de física aún está pendiente.
+
 ### Fase 1
 
-- [ ] T001 [Plan:P1.1] Crear constantes físicas y records de dominio en `src/main/java/com/calculafacil/model/`.
-- [ ] T002 [P] [Plan:P1.2] Implementar enums y convertidores de unidades en `src/main/java/com/calculafacil/model/`.
-- [ ] T003 [P] [Plan:P1.1] Configurar JUnit 5 y estructura de tests en `pom.xml` y `src/test/java/`.
+- [x] T001 [Plan:P1.1] Crear constantes físicas y records de dominio en `src/main/java/com/calculafacil/model/`.
+- [x] T002 [P] [Plan:P1.2] Implementar enums y convertidores de unidades en `src/main/java/com/calculafacil/model/`.
+- [x] T003 [P] [Plan:P1.1] Configurar JUnit 5 y estructura de tests en `pom.xml` y `src/test/java/`.
 
 ### Fase 2
 
-- [ ] T004 [Plan:P2.1] Implementar `SpectralRadianceCalculator` para Planck, Rayleigh-Jeans, Wien y cuerpo gris.
-- [ ] T005 [P] [Plan:P2.2] Implementar `SpectrumSampler` y `NumericalIntegrator`.
-- [ ] T006 [P] [Plan:P2.2] Implementar `StefanBoltzmannVerifier` y cálculo de pico de Wien.
-- [ ] T007 [P] [Plan:P2.3] Implementar presets y modelo de series superpuestas.
+- [x] T004 [Plan:P2.1] Implementar `SpectralRadianceCalculator` para Planck, Rayleigh-Jeans, Wien y cuerpo gris.
+- [x] T005 [P] [Plan:P2.2] Implementar `SpectrumSampler` y `NumericalIntegrator`.
+- [ ] T006 [P] [Plan:P2.2] Completar cálculo de `λmax = b/T` y conservar la verificación de Stefan-Boltzmann.
+- [x] T007 [P] [Plan:P2.3] Implementar presets y modelo de series superpuestas.
 
 ### Fase 3
 
-- [ ] T008 [Plan:P3.1] Completar `CalculatorView` con entradas, presets, unidades, emisividad y validación.
-- [ ] T009 [Plan:P3.2] Implementar `SpectrumChartPanel` con Graphics2D, leyenda, tooltip y zoom.
-- [ ] T010 [Plan:P3.3] Añadir tabla de muestras y panel de verificación numérica.
-- [ ] T011 [Plan:P3.1] Conectar eventos en `CalculatorController` y arrancar Swing desde `App.java`.
+- [x] T008 [Plan:P3.1] Completar `CalculatorView` con entradas, presets, unidades, emisividad y validación.
+- [x] T009 [Plan:P3.2] Implementar `SpectrumChartPanel` con Graphics2D y leyenda básica.
+- [ ] T010 [Plan:P3.3] Añadir tabla de muestras y panel completo de verificación numérica.
+- [x] T011 [Plan:P3.1] Conectar eventos en `CalculatorController` y arrancar Swing desde `App.java`.
 
 ### Fase 4
 
 - [ ] T012 [P] [Plan:P4.1] Implementar exportación CSV con metadatos y unidades.
-- [ ] T013 [P] [Plan:P4.2] Añadir tests de conversiones, fórmulas, pico solar, emisividad e integración.
-- [ ] T014 [Plan:P4.3] Actualizar README y ayuda integrada.
-- [ ] T015 [Plan:P4.2] Ejecutar `mvn test`, `mvn package` y una prueba manual de presets, zoom y CSV.
+- [ ] T013 [P] [Plan:P4.2] Ampliar tests de comparación histórica, estabilidad numérica, emisividad e integración.
+- [ ] T014 [Plan:P4.3] Completar README y ayuda integrada de física.
+- [ ] T015 [Plan:P4.2] Ejecutar `mvn test`, `mvn package` y una prueba manual de presets, comparación, zoom y CSV.
+
+### Fase 5 — Interacción y comparación didáctica
+
+- [x] T016 [Plan:P2.1,P3.2] Añadir controles para mostrar u ocultar Planck, Rayleigh-Jeans y Wien clásica.
+- [x] T017 [P] [Plan:P2.2] Implementar cálculo de `λmax = b/T` y mostrar el pico en los resultados.
+- [x] T018 [P] [Plan:P3.2] Añadir zoom con rueda y tooltip con λ y radiancia.
+- [ ] T019 [P] [Plan:P3.3] Añadir tabla de muestras, temperatura, pico, potencia integrada y error relativo.
+- [ ] T020 [Plan:P4.3] Añadir ventana de ayuda con ecuaciones, unidades, aproximaciones y explicación del factor `π`.
+- [ ] T021 [Plan:P4.1] Implementar exportación CSV de las series visibles con metadatos y unidades.
+- [ ] T022 [Plan:P4.2] Cubrir con tests las nuevas leyes, pico de Wien, CSV y validaciones de rango.
+- [ ] T023 [Plan:P4.2] Validar manualmente la experiencia en Windows/Linux y publicar una nueva versión portable.
 
 ## Requirement Mapping
 

@@ -6,6 +6,10 @@ import com.calculafacil.model.Temperature;
 
 public final class SpectralRadianceCalculator {
 
+    public double wavelengthPeak(Temperature temperature) {
+        return PhysicalConstants.WIEN_DISPLACEMENT / temperature.kelvin();
+    }
+
     public double planckByWavelength(double wavelengthMeters, Temperature temperature, Emissivity emissivity) {
         validatePositiveFinite(wavelengthMeters, "La longitud de onda");
         double exponent = PhysicalConstants.PLANCK * PhysicalConstants.SPEED_OF_LIGHT
