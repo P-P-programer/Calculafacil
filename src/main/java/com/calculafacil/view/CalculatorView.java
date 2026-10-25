@@ -38,6 +38,7 @@ public class CalculatorView {
     private final JFrame frame = new JFrame("Calcula Fácil - Radiación de cuerpo negro");
     private final JTextArea status = new JTextArea(4, 30);
     private final JTextArea instructions = new JTextArea();
+    private final JLabel tip = new JLabel();
     private final SpectrumChartPanel chart = new SpectrumChartPanel();
     private final JSpinner temperature = new JSpinner(new SpinnerNumberModel(5778.0, 0.01, 1_000_000.0, 10.0));
     private final JComboBox<TemperatureUnit> temperatureUnit = new JComboBox<>(TemperatureUnit.values());
@@ -51,6 +52,7 @@ public class CalculatorView {
     private final JCheckBox showRayleighJeans = new JCheckBox("Rayleigh-Jeans");
     private final JCheckBox showWien = new JCheckBox("Wien clásica");
     private final JLabel peak = new JLabel("λmax: --");
+    private final JButton importantNotice = new JButton("♥ Aviso importante");
 
     public CalculatorView() {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -59,7 +61,7 @@ public class CalculatorView {
         frame.setLayout(new BorderLayout(8, 8));
         frame.add(createHeader(), BorderLayout.NORTH);
         frame.add(createControls(), BorderLayout.WEST);
-        frame.add(chart, BorderLayout.CENTER);
+        frame.add(createChartArea(), BorderLayout.CENTER);
         frame.add(createResults(), BorderLayout.SOUTH);
         configureComponentStyles();
         status.setEditable(false);
@@ -67,13 +69,14 @@ public class CalculatorView {
         status.setWrapStyleWord(true);
         status.setText("Selecciona un preset o introduce una temperatura. "
                 + "Las curvas muestran Bλ en W·sr⁻¹·m⁻³.");
+        setTip("Empieza con el preset Sol y pulsa «Agregar curva» para explorar su máximo.");
     }
 
     private JPanel createHeader() {
         JPanel header = new JPanel(new BorderLayout(12, 2));
         header.setBackground(GRAPHITE);
         header.setBorder(BorderFactory.createEmptyBorder(10, 16, 10, 16));
-        JLabel title = new JLabel("Calcula Fácil  /  Radiación térmica");
+        JLabel title = new JLabel("Calcula Fácil  /  Radiación de cuerpo negro");
         title.setForeground(Color.WHITE);
         title.setFont(title.getFont().deriveFont(Font.BOLD, 18f));
         header.add(title, BorderLayout.WEST);
@@ -84,7 +87,24 @@ public class CalculatorView {
         instructions.setText("Guía rápida: agrega una temperatura · rueda para zoom · arrastra para desplazarte · "
                 + "pasa el cursor para consultar valores");
         header.add(instructions, BorderLayout.CENTER);
+        importantNotice.setToolTipText("Abrir aviso importante");
+        importantNotice.addActionListener(event -> showImportantNotice());
+        header.add(importantNotice, BorderLayout.EAST);
         return header;
+    }
+
+    private JPanel createChartArea() {
+        JPanel area = new JPanel(new BorderLayout(0, 6));
+        area.setBackground(SURFACE);
+        area.add(chart, BorderLayout.CENTER);
+        JPanel tipBox = new JPanel(new BorderLayout());
+        tipBox.setBackground(new Color(235, 242, 245));
+        tipBox.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(190, 211, 218)),
+                BorderFactory.createEmptyBorder(6, 10, 6, 10)));
+        tipBox.add(tip, BorderLayout.CENTER);
+        area.add(tipBox, BorderLayout.SOUTH);
+        return area;
     }
 
     private JPanel createControls() {
@@ -165,6 +185,12 @@ public class CalculatorView {
         verification.setForeground(SLATE);
         peak.setForeground(PETROLEUM);
         peak.setFont(peak.getFont().deriveFont(Font.BOLD));
+        tip.setForeground(SLATE);
+        tip.setFont(tip.getFont().deriveFont(Font.PLAIN, 12f));
+        importantNotice.setBackground(new Color(112, 50, 75));
+        importantNotice.setForeground(Color.WHITE);
+        importantNotice.setFocusPainted(false);
+        importantNotice.setBorder(BorderFactory.createEmptyBorder(6, 10, 6, 10));
     }
 
     public JFrame frame() {
@@ -225,6 +251,22 @@ public class CalculatorView {
 
     public JLabel peak() {
         return peak;
+    }
+
+    public void setTip(String message) {
+        tip.setText("  Consejo: " + message);
+    }
+
+    private void showImportantNotice() {
+        javax.swing.JOptionPane.showMessageDialog(frame,
+                "<html><div style='width:360px'>"
+                + "<h2>♥ Aviso importante</h2>"
+                + "<p><b>Moncada, el mejor profesor de todos.</b></p>"
+                + "<p>Atentamente,<br>los mejores hombres del mundo.</p>"
+                + "<p><i>Este espacio queda reservado para un pequeño clip o recuerdo.</i></p>"
+                + "</div></html>",
+                "Aviso importante",
+                javax.swing.JOptionPane.INFORMATION_MESSAGE);
     }
 
     public void showCurves(List<SpectrumCurve> curves, LengthUnit unit) {

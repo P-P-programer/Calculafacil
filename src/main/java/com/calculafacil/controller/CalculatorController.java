@@ -39,10 +39,20 @@ public class CalculatorController {
             view.showCurves(curves, selectedLengthUnit());
             view.verification().setText("Añade una curva para ver la verificación.");
             view.peak().setText("λmax: --");
+            view.setTip("La gráfica está limpia. Selecciona una temperatura para comenzar.");
         });
-        view.showPlanck().addActionListener(event -> refreshCurves());
-        view.showRayleighJeans().addActionListener(event -> refreshCurves());
-        view.showWien().addActionListener(event -> refreshCurves());
+        view.showPlanck().addActionListener(event -> {
+            refreshCurves();
+            view.setTip("Planck es la predicción completa; las otras curvas son aproximaciones históricas.");
+        });
+        view.showRayleighJeans().addActionListener(event -> {
+            refreshCurves();
+            view.setTip("Rayleigh-Jeans permite ver claramente la catástrofe ultravioleta.");
+        });
+        view.showWien().addActionListener(event -> {
+            refreshCurves();
+            view.setTip("Wien se aproxima bien en longitudes de onda pequeñas, pero no en todo el espectro.");
+        });
         view.presets().addListSelectionListener(event -> {
             if (!event.getValueIsAdjusting() && view.presets().getSelectedValue() != null) {
                 TemperaturePreset preset = view.presets().getSelectedValue();
@@ -84,6 +94,7 @@ public class CalculatorController {
             view.status().setText(String.format("Curva agregada para %.2f K (%.2f °C, %.2f °F). "
                     + "Puedes superponer más temperaturas.", selectedTemperature.kelvin(),
                     selectedTemperature.celsius(), selectedTemperature.fahrenheit()));
+            view.setTip("Usa la rueda sobre el plano para ampliar y arrastra para recorrer la curva.");
         } catch (IllegalArgumentException exception) {
             view.status().setText("Entrada no válida: " + exception.getMessage());
         }

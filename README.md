@@ -84,7 +84,8 @@ navegación, superficies claras para reducir fatiga visual y azul petróleo como
 acento principal. Los colores de las curvas tienen significado consistente:
 azul para Planck, naranja para Rayleigh-Jeans y verde para Wien.
 
-La gráfica actual representa `Bλ` en función de la longitud de onda. Las
+La aplicación representa la **radiación de cuerpo negro** mediante la
+gráfica `Bλ` en función de la longitud de onda. Las
 curvas se calculan internamente en unidades SI y solo se convierten para su
 presentación.
 
