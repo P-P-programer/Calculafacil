@@ -23,9 +23,6 @@ jobs:
           - platform: linux
             os: ubuntu-latest
             archive: tar.gz
-          - platform: macos
-            os: macos-13
-            archive: zip
 
     steps:
       - name: Checkout
@@ -83,23 +80,6 @@ jobs:
             --main-class com.calculafacil.App \
             --dest dist
           tar -C dist -czf "CalculaFacil-${{ github.ref_name }}-linux.tar.gz" CalculaFacil
-
-      - name: Create portable macOS app-image
-        if: matrix.platform == 'macos'
-        shell: bash
-        run: |
-          mkdir -p dist/input
-          cp "${{ steps.jar.outputs.path }}" dist/input/
-          jpackage \
-            --type app-image \
-            --input dist/input \
-            --name CalculaFacil \
-            --main-jar "${{ steps.jar.outputs.name }}" \
-            --main-class com.calculafacil.App \
-            --dest dist
-          ditto -c -k --sequesterRsrc --keepParent \
-            dist/CalculaFacil.app \
-            "CalculaFacil-${{ github.ref_name }}-macos.zip"
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v4

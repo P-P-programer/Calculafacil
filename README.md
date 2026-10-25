@@ -44,13 +44,12 @@ java -jar target/calculadora-cuerpo-negro-0.1.0-SNAPSHOT.jar
 ## Descargas para usuarios
 
 Cada vez que se publica un tag con formato `v*`, GitHub Actions compila y
-publica una versión portable para Windows, Linux y macOS en
+publica versiones portables para Windows y Linux en
 [Releases](https://github.com/P-P-programer/Calculafacil/releases).
 
 Estas versiones incluyen un runtime de Java mediante `jpackage`, por lo que la
-persona usuaria no necesita instalar Java. En Windows y Linux se descarga el
-archivo de la plataforma y se ejecuta `CalculaFacil` dentro de la carpeta
-extraída. En macOS se abre el archivo `.app` extraído.
+persona usuaria no necesita instalar Java. Se descarga el archivo de la
+plataforma y se ejecuta `CalculaFacil` dentro de la carpeta extraída.
 
 Para publicar una versión:
 
@@ -60,7 +59,7 @@ git push origin v0.1.0
 ```
 
 El workflow ejecuta primero las pruebas Maven y solo publica el Release si
-Windows, Linux y macOS terminan correctamente.
+Windows y Linux terminan correctamente.
 
 En la ventana:
 
