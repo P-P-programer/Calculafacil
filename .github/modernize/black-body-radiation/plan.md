@@ -252,7 +252,7 @@ La entrega inicial está completada para las tareas T001–T005, T007–T009 y T
 
 - [x] T016 [Plan:P2.1,P3.2] Añadir controles para mostrar u ocultar Planck, Rayleigh-Jeans y Wien clásica.
 - [x] T017 [P] [Plan:P2.2] Implementar cálculo de `λmax = b/T` y mostrar el pico en los resultados.
-- [x] T018 [P] [Plan:P3.2] Añadir zoom con rueda y tooltip con λ y radiancia.
+- [x] T018 [P] [Plan:P3.2] Añadir zoom acotado, arrastre horizontal, retícula y tarjeta visual con λ, radiancia y marcadores.
 - [ ] T019 [P] [Plan:P3.3] Añadir tabla de muestras, temperatura, pico, potencia integrada y error relativo.
 - [ ] T020 [Plan:P4.3] Añadir ventana de ayuda con ecuaciones, unidades, aproximaciones y explicación del factor `π`.
 - [ ] T021 [Plan:P4.1] Implementar exportación CSV de las series visibles con metadatos y unidades.
