@@ -5,7 +5,9 @@ import com.calculafacil.model.TemperaturePreset;
 import com.calculafacil.model.TemperatureUnit;
 import com.calculafacil.model.SpectrumCurve;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -27,8 +29,15 @@ import javax.swing.SpinnerNumberModel;
 
 public class CalculatorView {
 
+    private static final Color GRAPHITE = new Color(38, 43, 51);
+    private static final Color SLATE = new Color(74, 86, 100);
+    private static final Color PETROLEUM = new Color(25, 92, 110);
+    private static final Color SURFACE = new Color(247, 249, 251);
+    private static final Color BORDER = new Color(205, 213, 221);
+
     private final JFrame frame = new JFrame("Calcula Fácil - Radiación de cuerpo negro");
     private final JTextArea status = new JTextArea(4, 30);
+    private final JTextArea instructions = new JTextArea();
     private final SpectrumChartPanel chart = new SpectrumChartPanel();
     private final JSpinner temperature = new JSpinner(new SpinnerNumberModel(5778.0, 0.01, 1_000_000.0, 10.0));
     private final JComboBox<TemperatureUnit> temperatureUnit = new JComboBox<>(TemperatureUnit.values());
@@ -46,10 +55,13 @@ public class CalculatorView {
     public CalculatorView() {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setMinimumSize(new Dimension(1100, 700));
+        frame.setBackground(SURFACE);
         frame.setLayout(new BorderLayout(8, 8));
+        frame.add(createHeader(), BorderLayout.NORTH);
         frame.add(createControls(), BorderLayout.WEST);
         frame.add(chart, BorderLayout.CENTER);
         frame.add(createResults(), BorderLayout.SOUTH);
+        configureComponentStyles();
         status.setEditable(false);
         status.setLineWrap(true);
         status.setWrapStyleWord(true);
@@ -57,9 +69,28 @@ public class CalculatorView {
                 + "Las curvas muestran Bλ en W·sr⁻¹·m⁻³.");
     }
 
+    private JPanel createHeader() {
+        JPanel header = new JPanel(new BorderLayout(12, 2));
+        header.setBackground(GRAPHITE);
+        header.setBorder(BorderFactory.createEmptyBorder(10, 16, 10, 16));
+        JLabel title = new JLabel("Calcula Fácil  /  Radiación térmica");
+        title.setForeground(Color.WHITE);
+        title.setFont(title.getFont().deriveFont(Font.BOLD, 18f));
+        header.add(title, BorderLayout.WEST);
+        instructions.setEditable(false);
+        instructions.setOpaque(false);
+        instructions.setForeground(new Color(225, 232, 238));
+        instructions.setFont(instructions.getFont().deriveFont(12f));
+        instructions.setText("Guía rápida: agrega una temperatura · rueda para zoom · arrastra para desplazarte · "
+                + "pasa el cursor para consultar valores");
+        header.add(instructions, BorderLayout.CENTER);
+        return header;
+    }
+
     private JPanel createControls() {
         JPanel panel = new JPanel(new GridBagLayout());
         panel.setBorder(BorderFactory.createTitledBorder("Parámetros"));
+        panel.setBackground(SURFACE);
         GridBagConstraints c = new GridBagConstraints();
         c.insets = new Insets(4, 6, 4, 6);
         c.fill = GridBagConstraints.HORIZONTAL;
@@ -75,12 +106,14 @@ public class CalculatorView {
         c.gridy = 5;
         panel.add(new JScrollPane(presets), c);
         JPanel buttons = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        buttons.setOpaque(false);
         buttons.add(calculate);
         buttons.add(clear);
         c.gridy = 6;
         panel.add(buttons, c);
         c.gridy = 7;
         JPanel laws = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        laws.setOpaque(false);
         laws.add(showPlanck);
         laws.add(showRayleighJeans);
         laws.add(showWien);
@@ -102,9 +135,36 @@ public class CalculatorView {
     private JPanel createResults() {
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         panel.setBorder(BorderFactory.createTitledBorder("Verificación de Stefan-Boltzmann"));
+        panel.setBackground(SURFACE);
         panel.add(peak);
         panel.add(verification);
         return panel;
+    }
+
+    private void configureComponentStyles() {
+        frame.getContentPane().setBackground(SURFACE);
+        chart.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(BORDER),
+                BorderFactory.createTitledBorder(
+                        BorderFactory.createEmptyBorder(), "Radiancia espectral de Planck",
+                        javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.TOP,
+                        new Font(Font.SANS_SERIF, Font.BOLD, 13), GRAPHITE)));
+        calculate.setBackground(PETROLEUM);
+        calculate.setForeground(Color.WHITE);
+        calculate.setFocusPainted(false);
+        clear.setBackground(new Color(232, 236, 240));
+        clear.setForeground(GRAPHITE);
+        clear.setFocusPainted(false);
+        status.setBackground(new Color(238, 242, 245));
+        status.setForeground(SLATE);
+        status.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(BORDER), BorderFactory.createEmptyBorder(5, 6, 5, 6)));
+        presets.setBackground(Color.WHITE);
+        presets.setSelectionBackground(new Color(206, 230, 236));
+        presets.setSelectionForeground(GRAPHITE);
+        verification.setForeground(SLATE);
+        peak.setForeground(PETROLEUM);
+        peak.setFont(peak.getFont().deriveFont(Font.BOLD));
     }
 
     public JFrame frame() {

@@ -70,6 +70,20 @@ En la ventana:
 - Consulta la integral numérica y el valor teórico de Stefan-Boltzmann en la
   barra inferior.
 
+### Guía rápida de la gráfica
+
+- **Rueda del mouse:** acerca o aleja la vista alrededor del cursor.
+- **Arrastrar dentro del plano:** desplaza la vista horizontalmente.
+- **Mover el cursor:** muestra una línea de referencia, marca el punto más
+  cercano de cada curva y presenta sus valores.
+- **Líneas continuas, discontinuas y punteadas:** identifican Planck,
+  Rayleigh-Jeans y Wien clásica.
+
+La interfaz usa una paleta neutra de alto contraste: grafito para la
+navegación, superficies claras para reducir fatiga visual y azul petróleo como
+acento principal. Los colores de las curvas tienen significado consistente:
+azul para Planck, naranja para Rayleigh-Jeans y verde para Wien.
+
 La gráfica actual representa `Bλ` en función de la longitud de onda. Las
 curvas se calculan internamente en unidades SI y solo se convierten para su
 presentación.

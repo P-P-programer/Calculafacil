@@ -23,8 +23,8 @@ public final class SpectrumChartPanel extends JPanel {
     private static final int TOP = 35;
     private static final int BOTTOM = 55;
     private static final Color[] COLORS = {
-        new Color(20, 80, 180), new Color(210, 70, 40), new Color(30, 140, 80),
-        new Color(150, 70, 170), new Color(210, 130, 20)
+        new Color(25, 92, 166), new Color(205, 105, 45), new Color(45, 128, 105),
+        new Color(111, 91, 148), new Color(192, 139, 45)
     };
 
     private List<SpectrumCurve> curves = List.of();
