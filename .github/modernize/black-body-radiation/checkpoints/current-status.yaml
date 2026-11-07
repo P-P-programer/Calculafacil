@@ -5,31 +5,31 @@ completed:
   - T003
   - T004
   - T005
+  - T006
   - T007
   - T008
   - T009
   - T011
+  - T010
+  - T014
   - T016
   - T017
   - T018
+  - T019
+  - T020
+  - T021
+  - T022
+  - T012
   - important-notice-image-resource
   - portable-windows-linux-release
 validated:
   - mvn test
   - mvn package
 pending:
-  - T006
-  - T010
-  - T012
   - T013
-  - T014
   - T015
-  - T019
-  - T020
-  - T021
-  - T022
   - T023
 next_batch:
-  - T010
-  - T019
-  - T021
+  - T013
+  - T015
+  - T023

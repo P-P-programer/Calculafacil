@@ -7,6 +7,9 @@ import com.calculafacil.model.TemperatureUnit;
 import com.calculafacil.service.SpectralRadianceCalculator;
 import com.calculafacil.service.SpectrumSampler;
 import com.calculafacil.service.StefanBoltzmannVerifier;
+import com.calculafacil.service.CsvSpectrumExporter;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -80,5 +83,21 @@ class PhysicsTest {
     void rejectsInvalidTemperatureAndEmissivity() {
         assertThrows(IllegalArgumentException.class, () -> new Temperature(0));
         assertThrows(IllegalArgumentException.class, () -> new Emissivity(1.1));
+    }
+
+    @Test
+    void exportsVisibleCurvesAsUtf8Csv() throws Exception {
+        var curve = new SpectrumSampler().samplePlanckWavelength(
+                "Planck Sol", 500e-9, 600e-9, 3, new Temperature(5778), blackBody);
+        Path file = Files.createTempFile("calculafacil-", ".csv");
+        try {
+            new CsvSpectrumExporter().export(file, java.util.List.of(curve), LengthUnit.NANOMETER);
+            String csv = Files.readString(file);
+            assertTrue(csv.contains("lambda_nm"));
+            assertTrue(csv.contains("\"Planck Sol\""));
+            assertTrue(csv.lines().count() == 6);
+        } finally {
+            Files.deleteIfExists(file);
+        }
     }
 }

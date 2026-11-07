@@ -27,6 +27,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTextArea;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.SpinnerNumberModel;
 
 public class CalculatorView {
@@ -55,6 +57,9 @@ public class CalculatorView {
     private final JCheckBox showWien = new JCheckBox("Wien clásica");
     private final JLabel peak = new JLabel("λmax: --");
     private final JButton importantNotice = new JButton("♥ Aviso importante");
+    private final JButton results = new JButton("Ver datos");
+    private final JButton export = new JButton("Exportar CSV");
+    private final JButton help = new JButton("Ayuda física");
 
     public CalculatorView() {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -131,6 +136,9 @@ public class CalculatorView {
         buttons.setOpaque(false);
         buttons.add(calculate);
         buttons.add(clear);
+        buttons.add(results);
+        buttons.add(export);
+        buttons.add(help);
         c.gridy = 6;
         panel.add(buttons, c);
         c.gridy = 7;
@@ -193,6 +201,13 @@ public class CalculatorView {
         importantNotice.setForeground(Color.WHITE);
         importantNotice.setFocusPainted(false);
         importantNotice.setBorder(BorderFactory.createEmptyBorder(6, 10, 6, 10));
+        results.setBackground(new Color(232, 236, 240));
+        export.setBackground(PETROLEUM);
+        export.setForeground(Color.WHITE);
+        help.setBackground(new Color(232, 236, 240));
+        results.setFocusPainted(false);
+        export.setFocusPainted(false);
+        help.setFocusPainted(false);
     }
 
     public JFrame frame() {
@@ -253,6 +268,86 @@ public class CalculatorView {
 
     public JLabel peak() {
         return peak;
+    }
+
+    public JButton results() {
+        return results;
+    }
+
+    public JButton export() {
+        return export;
+    }
+
+    public JButton help() {
+        return help;
+    }
+
+    public void showDataTable(List<SpectrumCurve> curves, LengthUnit unit) {
+        if (curves.isEmpty()) {
+            setTip("Agrega al menos una curva antes de consultar sus datos.");
+            return;
+        }
+        String[] columns = new String[curves.size() + 1];
+        columns[0] = "λ (" + unit.symbol() + ")";
+        for (int index = 0; index < curves.size(); index++) {
+            columns[index + 1] = curves.get(index).name();
+        }
+        DefaultTableModel tableModel = new DefaultTableModel(columns, 0);
+        int rows = curves.get(0).points().size();
+        for (int row = 0; row < rows; row++) {
+            Object[] values = new Object[columns.length];
+            values[0] = String.format("%.6g", unit.fromMeters(curves.get(0).points().get(row).independentValue()));
+            for (int curve = 0; curve < curves.size(); curve++) {
+                values[curve + 1] = String.format("%.6g", curves.get(curve).points().get(row).radiance());
+            }
+            tableModel.addRow(values);
+        }
+        JTable table = new JTable(tableModel);
+        table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        table.setFillsViewportHeight(true);
+        JScrollPane scroll = new JScrollPane(table);
+        scroll.setPreferredSize(new Dimension(900, 480));
+        javax.swing.JOptionPane.showMessageDialog(frame, scroll,
+                "Datos de curvas visibles", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    public void showHelp() {
+        JTextArea text = new JTextArea("""
+                ¿Qué estás viendo?
+
+                Planck (Bλ) describe la radiancia espectral de un cuerpo negro.
+                λmax = b/T indica la longitud de onda del máximo.
+
+                Comparaciones históricas:
+                • Rayleigh-Jeans funciona en longitudes de onda grandes, pero diverge
+                  hacia el ultravioleta.
+                • Wien es útil en la región de alta frecuencia, pero no describe
+                  correctamente todo el espectro.
+
+                Cómo usar la gráfica:
+                • Rueda: zoom alrededor del cursor.
+                • Arrastre: desplazamiento horizontal.
+                • Cursor: valores del punto más cercano.
+
+                Unidades:
+                • La longitud de onda se calcula internamente en metros.
+                • La temperatura física se convierte internamente a kelvin.
+                • ε=1 es cuerpo negro; ε<1 es cuerpo gris.
+
+                Stefan-Boltzmann:
+                La integral de Bλ se multiplica por π para integrar la radiancia
+                sobre el hemisferio emisor y compararla con εσT⁴.
+                """);
+        text.setEditable(false);
+        text.setLineWrap(true);
+        text.setWrapStyleWord(true);
+        text.setFont(text.getFont().deriveFont(13f));
+        text.setBackground(SURFACE);
+        text.setBorder(BorderFactory.createEmptyBorder(12, 12, 12, 12));
+        JScrollPane scroll = new JScrollPane(text);
+        scroll.setPreferredSize(new Dimension(620, 420));
+        javax.swing.JOptionPane.showMessageDialog(frame, scroll,
+                "Ayuda física", javax.swing.JOptionPane.INFORMATION_MESSAGE);
     }
 
     public void setTip(String message) {

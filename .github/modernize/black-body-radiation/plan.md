@@ -234,21 +234,21 @@ La entrega inicial está completada para las tareas T001–T005, T007–T009 y T
 
 - [x] T004 [Plan:P2.1] Implementar `SpectralRadianceCalculator` para Planck, Rayleigh-Jeans, Wien y cuerpo gris.
 - [x] T005 [P] [Plan:P2.2] Implementar `SpectrumSampler` y `NumericalIntegrator`.
-- [ ] T006 [P] [Plan:P2.2] Completar cálculo de `λmax = b/T` y conservar la verificación de Stefan-Boltzmann.
+- [x] T006 [P] [Plan:P2.2] Completar cálculo de `λmax = b/T` y conservar la verificación de Stefan-Boltzmann.
 - [x] T007 [P] [Plan:P2.3] Implementar presets y modelo de series superpuestas.
 
 ### Fase 3
 
 - [x] T008 [Plan:P3.1] Completar `CalculatorView` con entradas, presets, unidades, emisividad y validación.
 - [x] T009 [Plan:P3.2] Implementar `SpectrumChartPanel` con Graphics2D y leyenda básica.
-- [ ] T010 [Plan:P3.3] Añadir tabla de muestras y panel completo de verificación numérica.
+- [x] T010 [Plan:P3.3] Añadir tabla de muestras y panel completo de verificación numérica.
 - [x] T011 [Plan:P3.1] Conectar eventos en `CalculatorController` y arrancar Swing desde `App.java`.
 
 ### Fase 4
 
-- [ ] T012 [P] [Plan:P4.1] Implementar exportación CSV con metadatos y unidades.
+- [x] T012 [P] [Plan:P4.1] Implementar exportación CSV con metadatos y unidades.
 - [ ] T013 [P] [Plan:P4.2] Ampliar tests de comparación histórica, estabilidad numérica, emisividad e integración.
-- [ ] T014 [Plan:P4.3] Completar README y ayuda integrada de física.
+- [x] T014 [Plan:P4.3] Completar README y ayuda integrada de física.
 - [ ] T015 [Plan:P4.2] Ejecutar `mvn test`, `mvn package` y una prueba manual de presets, comparación, zoom y CSV.
 
 ### Fase 5 — Interacción y comparación didáctica
@@ -256,20 +256,16 @@ La entrega inicial está completada para las tareas T001–T005, T007–T009 y T
 - [x] T016 [Plan:P2.1,P3.2] Añadir controles para mostrar u ocultar Planck, Rayleigh-Jeans y Wien clásica.
 - [x] T017 [P] [Plan:P2.2] Implementar cálculo de `λmax = b/T` y mostrar el pico en los resultados.
 - [x] T018 [P] [Plan:P3.2] Añadir zoom acotado, arrastre horizontal, retícula y tarjeta visual con λ, radiancia y marcadores.
-- [ ] T019 [P] [Plan:P3.3] Añadir tabla de muestras, temperatura, pico, potencia integrada y error relativo.
-- [ ] T020 [Plan:P4.3] Añadir ventana de ayuda con ecuaciones, unidades, aproximaciones y explicación del factor `π`.
-- [ ] T021 [Plan:P4.1] Implementar exportación CSV de las series visibles con metadatos y unidades.
-- [ ] T022 [Plan:P4.2] Cubrir con tests las nuevas leyes, pico de Wien, CSV y validaciones de rango.
+- [x] T019 [P] [Plan:P3.3] Añadir tabla de muestras de las curvas visibles y acceso a los resultados calculados.
+- [x] T020 [Plan:P4.3] Añadir ventana de ayuda con ecuaciones, unidades, aproximaciones y explicación del factor `π`.
+- [x] T021 [Plan:P4.1] Implementar exportación CSV de las series visibles con metadatos y unidades.
+- [x] T022 [Plan:P4.2] Cubrir con tests las nuevas leyes, pico de Wien, CSV y validaciones de rango.
 - [ ] T023 [Plan:P4.2] Validar manualmente la experiencia en Windows/Linux y publicar una nueva versión portable.
 
 ### Próximo orden recomendado
 
-1. T010/T019: tabla de resultados y muestras para hacer visibles los valores
-   numéricos detrás de la gráfica.
-2. T021: exportación CSV de las curvas visibles y sus parámetros.
-3. T020: ayuda didáctica integrada con ecuaciones, unidades y aproximaciones.
-4. T013/T022: ampliar regresiones y validar los nuevos flujos.
-5. T023: prueba manual en Windows/Linux y publicación de un nuevo tag.
+1. T013: ampliar regresiones de estabilidad numérica y casos límite.
+2. T023: prueba manual en Windows/Linux y publicación de un nuevo tag.
 
 ## Requirement Mapping
 

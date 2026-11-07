@@ -66,6 +66,9 @@ En la ventana:
 - Selecciona un preset o introduce una temperatura en K, °C o °F.
 - Ajusta la emisividad `ε` entre 0 y 1 para explorar cuerpos grises.
 - Pulsa **Agregar curva** para superponer temperaturas.
+- Pulsa **Ver datos** para inspeccionar las muestras de las curvas visibles.
+- Pulsa **Exportar CSV** para guardar esas mismas muestras con sus unidades.
+- Pulsa **Ayuda física** para consultar las ecuaciones y aproximaciones.
 - Cambia la unidad del eje entre m, µm y nm.
 - Consulta la integral numérica y el valor teórico de Stefan-Boltzmann en la
   barra inferior.

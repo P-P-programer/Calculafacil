@@ -10,6 +10,10 @@ import com.calculafacil.model.TemperatureUnit;
 import com.calculafacil.service.SpectrumSampler;
 import com.calculafacil.service.SpectralRadianceCalculator;
 import com.calculafacil.service.StefanBoltzmannVerifier;
+import com.calculafacil.service.CsvSpectrumExporter;
+import java.io.IOException;
+import java.nio.file.Path;
+import javax.swing.JFileChooser;
 import com.calculafacil.view.CalculatorView;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +37,9 @@ public class CalculatorController {
         this.model = model;
         this.view = view;
         view.calculate().addActionListener(event -> addCurve());
+        view.results().addActionListener(event -> view.showDataTable(curves, selectedLengthUnit()));
+        view.help().addActionListener(event -> view.showHelp());
+        view.export().addActionListener(event -> exportCurves());
         view.clear().addActionListener(event -> {
             curves.clear();
             definitions.clear();
@@ -102,6 +109,27 @@ public class CalculatorController {
 
     private LengthUnit selectedLengthUnit() {
         return (LengthUnit) view.lengthUnit().getSelectedItem();
+    }
+
+    private void exportCurves() {
+        if (curves.isEmpty()) {
+            view.setTip("Agrega al menos una curva antes de exportar.");
+            return;
+        }
+        JFileChooser chooser = new JFileChooser();
+        chooser.setDialogTitle("Guardar datos espectrales");
+        chooser.setSelectedFile(new java.io.File("radiacion-cuerpo-negro.csv"));
+        if (chooser.showSaveDialog(view.frame()) != JFileChooser.APPROVE_OPTION) {
+            return;
+        }
+        Path destination = chooser.getSelectedFile().toPath();
+        try {
+            new CsvSpectrumExporter().export(destination, curves, selectedLengthUnit());
+            view.status().setText("CSV exportado correctamente: " + destination);
+            view.setTip("El CSV contiene la longitud de onda visible y una columna por curva.");
+        } catch (IOException | IllegalArgumentException exception) {
+            view.status().setText("No se pudo exportar el CSV: " + exception.getMessage());
+        }
     }
 
     private void refreshCurves() {
