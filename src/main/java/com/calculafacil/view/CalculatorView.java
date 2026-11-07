@@ -12,6 +12,7 @@ import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.Image;
 import java.text.DecimalFormat;
 import java.util.List;
 import javax.swing.BorderFactory;
@@ -19,6 +20,7 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
@@ -258,15 +260,27 @@ public class CalculatorView {
     }
 
     private void showImportantNotice() {
-        javax.swing.JOptionPane.showMessageDialog(frame,
-                "<html><div style='width:360px'>"
+        var imageUrl = CalculatorView.class.getResource("/images/moncada.png");
+        if (imageUrl == null) {
+            javax.swing.JOptionPane.showMessageDialog(frame,
+                    "No se encontró el recurso /images/moncada.png.",
+                    "Aviso importante",
+                    javax.swing.JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        Image image = new ImageIcon(imageUrl).getImage()
+                .getScaledInstance(240, 240, Image.SCALE_SMOOTH);
+        JPanel content = new JPanel(new BorderLayout(12, 8));
+        content.setBackground(SURFACE);
+        content.add(new JLabel(new ImageIcon(image)), BorderLayout.WEST);
+        JLabel message = new JLabel("<html><div style='width:260px'>"
                 + "<h2>♥ Aviso importante</h2>"
                 + "<p><b>Moncada, el mejor profesor de todos.</b></p>"
                 + "<p>Atentamente,<br>los mejores hombres del mundo.</p>"
-                + "<p><i>Este espacio queda reservado para un pequeño clip o recuerdo.</i></p>"
-                + "</div></html>",
-                "Aviso importante",
-                javax.swing.JOptionPane.INFORMATION_MESSAGE);
+                + "</div></html>");
+        content.add(message, BorderLayout.CENTER);
+        javax.swing.JOptionPane.showMessageDialog(frame, content,
+                "Aviso importante", javax.swing.JOptionPane.INFORMATION_MESSAGE);
     }
 
     public void showCurves(List<SpectrumCurve> curves, LengthUnit unit) {

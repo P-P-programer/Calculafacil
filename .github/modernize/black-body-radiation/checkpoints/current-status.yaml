@@ -12,6 +12,7 @@ completed:
   - T016
   - T017
   - T018
+  - important-notice-image-resource
   - portable-windows-linux-release
 validated:
   - mvn test

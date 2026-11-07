@@ -218,6 +218,9 @@ La entrega inicial está completada para las tareas T001–T005, T007–T009 y T
 - El pipeline de distribución portable para Windows y Linux está implementado en
   `.github/workflows/release.yml`. macOS queda fuera temporalmente porque el
   runner no estuvo disponible; no bloquea la publicación de las otras plataformas.
+- El aviso importante ya usa el recurso empaquetado
+  `src/main/resources/images/moncada.png`, por lo que la imagen acompaña al JAR
+  y a las aplicaciones portables.
 - `README.md` ya documenta ejecución local y descargas desde Releases, pero la
   ayuda integrada de física aún está pendiente.
 
@@ -258,6 +261,15 @@ La entrega inicial está completada para las tareas T001–T005, T007–T009 y T
 - [ ] T021 [Plan:P4.1] Implementar exportación CSV de las series visibles con metadatos y unidades.
 - [ ] T022 [Plan:P4.2] Cubrir con tests las nuevas leyes, pico de Wien, CSV y validaciones de rango.
 - [ ] T023 [Plan:P4.2] Validar manualmente la experiencia en Windows/Linux y publicar una nueva versión portable.
+
+### Próximo orden recomendado
+
+1. T010/T019: tabla de resultados y muestras para hacer visibles los valores
+   numéricos detrás de la gráfica.
+2. T021: exportación CSV de las curvas visibles y sus parámetros.
+3. T020: ayuda didáctica integrada con ecuaciones, unidades y aproximaciones.
+4. T013/T022: ampliar regresiones y validar los nuevos flujos.
+5. T023: prueba manual en Windows/Linux y publicación de un nuevo tag.
 
 ## Requirement Mapping
 
