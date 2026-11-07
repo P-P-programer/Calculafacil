@@ -100,4 +100,29 @@ class PhysicsTest {
             Files.deleteIfExists(file);
         }
     }
+
+    @Test
+    void handlesExtremePhysicalInputsWithoutNaNOrInfinity() {
+        var hot = new Temperature(1_000_000.0);
+        var cold = new Temperature(0.01);
+        assertTrue(Double.isFinite(calculator.planckByWavelength(1e-12, hot, blackBody)));
+        assertTrue(Double.isFinite(calculator.planckByWavelength(1e-2, cold, blackBody)));
+        assertTrue(Double.isFinite(calculator.planckByFrequency(1e3, cold, blackBody)));
+    }
+
+    @Test
+    void rejectsInvalidSamplingRangesAndEmptyExports() throws Exception {
+        var sampler = new SpectrumSampler();
+        assertThrows(IllegalArgumentException.class,
+                () -> sampler.sample("invalid", 1.0, 1.0, 10, value -> value));
+        assertThrows(IllegalArgumentException.class,
+                () -> sampler.sample("invalid", 1.0, 2.0, 1, value -> value));
+        Path file = Files.createTempFile("calculafacil-empty-", ".csv");
+        try {
+            assertThrows(IllegalArgumentException.class,
+                    () -> new CsvSpectrumExporter().export(file, java.util.List.of(), LengthUnit.NANOMETER));
+        } finally {
+            Files.deleteIfExists(file);
+        }
+    }
 }

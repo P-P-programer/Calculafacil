@@ -68,6 +68,8 @@ En la ventana:
 - Pulsa **Agregar curva** para superponer temperaturas.
 - Pulsa **Ver datos** para inspeccionar las muestras de las curvas visibles.
 - Pulsa **Exportar CSV** para guardar esas mismas muestras con sus unidades.
+  El archivo CSV se puede abrir directamente en Excel, LibreOffice o Google
+  Sheets sin instalar componentes adicionales.
 - Pulsa **Ayuda física** para consultar las ecuaciones y aproximaciones.
 - Cambia la unidad del eje entre m, µm y nm.
 - Consulta la integral numérica y el valor teórico de Stefan-Boltzmann en la

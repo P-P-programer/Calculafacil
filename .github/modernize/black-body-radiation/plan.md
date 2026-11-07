@@ -247,7 +247,7 @@ La entrega inicial está completada para las tareas T001–T005, T007–T009 y T
 ### Fase 4
 
 - [x] T012 [P] [Plan:P4.1] Implementar exportación CSV con metadatos y unidades.
-- [ ] T013 [P] [Plan:P4.2] Ampliar tests de comparación histórica, estabilidad numérica, emisividad e integración.
+- [x] T013 [P] [Plan:P4.2] Ampliar tests de comparación histórica, estabilidad numérica, emisividad, entradas extremas e integración.
 - [x] T014 [Plan:P4.3] Completar README y ayuda integrada de física.
 - [ ] T015 [Plan:P4.2] Ejecutar `mvn test`, `mvn package` y una prueba manual de presets, comparación, zoom y CSV.
 
@@ -264,8 +264,14 @@ La entrega inicial está completada para las tareas T001–T005, T007–T009 y T
 
 ### Próximo orden recomendado
 
-1. T013: ampliar regresiones de estabilidad numérica y casos límite.
-2. T023: prueba manual en Windows/Linux y publicación de un nuevo tag.
+1. T023: prueba manual en Windows/Linux y publicación de un nuevo tag.
+
+### Decisión de exportación
+
+CSV es el formato principal porque es portable, legible, reproducible y se abre
+directamente en Excel, LibreOffice y Google Sheets. La tabla **Ver datos** es la
+vista previa antes de exportar. No se generará `.xlsx` en esta fase: añadiría
+una dependencia y complejidad de formato sin mejorar los datos científicos.
 
 ## Requirement Mapping
 
