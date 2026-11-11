@@ -70,6 +70,14 @@ class PhysicsTest {
     }
 
     @Test
+    void frequencyRepresentationProvidesAllHistoricalCurves() {
+        var temperature = new Temperature(5778.0);
+        assertTrue(calculator.planckByFrequency(5e14, temperature, blackBody) > 0.0);
+        assertTrue(calculator.rayleighJeansByFrequency(5e14, temperature, blackBody) > 0.0);
+        assertTrue(calculator.wienByFrequency(5e14, temperature, blackBody) > 0.0);
+    }
+
+    @Test
     void integrationApproachesStefanBoltzmann() {
         var temperature = new Temperature(5778);
         var curve = new SpectrumSampler().samplePlanckWavelength(

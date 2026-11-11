@@ -21,4 +21,9 @@ public enum TemperaturePreset {
     public Temperature temperature() {
         return temperature;
     }
+
+    @Override
+    public String toString() {
+        return label + " (" + temperature.kelvin() + " K)";
+    }
 }

@@ -3,6 +3,7 @@ package com.calculafacil.view;
 import com.calculafacil.model.LengthUnit;
 import com.calculafacil.model.SpectrumCurve;
 import com.calculafacil.model.SpectrumPoint;
+import com.calculafacil.model.SpectralRepresentation;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -29,6 +30,9 @@ public final class SpectrumChartPanel extends JPanel {
 
     private List<SpectrumCurve> curves = List.of();
     private LengthUnit unit = LengthUnit.NANOMETER;
+    private SpectralRepresentation representation = SpectralRepresentation.WAVELENGTH;
+    private String axisUnit = "nm";
+    private double axisFactor = 1e9;
     private double zoom = 1.0;
     private double viewStart = 0.0;
     private int pointerX = -1;
@@ -86,6 +90,18 @@ public final class SpectrumChartPanel extends JPanel {
     public void setCurves(List<SpectrumCurve> curves, LengthUnit unit) {
         this.curves = List.copyOf(curves);
         this.unit = unit;
+        this.representation = SpectralRepresentation.WAVELENGTH;
+        this.axisUnit = unit.symbol();
+        this.axisFactor = 1.0 / unit.toMeters(1.0);
+        resetViewport();
+        repaint();
+    }
+
+    public void setFrequencyCurves(List<SpectrumCurve> curves, String unit, double factor) {
+        this.curves = List.copyOf(curves);
+        this.representation = SpectralRepresentation.FREQUENCY;
+        this.axisUnit = unit;
+        this.axisFactor = factor;
         resetViewport();
         repaint();
     }
@@ -104,9 +120,9 @@ public final class SpectrumChartPanel extends JPanel {
         g.setColor(new Color(40, 40, 40));
         g.drawLine(LEFT, TOP, LEFT, TOP + height);
         g.drawLine(LEFT, TOP + height, LEFT + width, TOP + height);
-        g.drawString("λ (" + unit.symbol() + ")", LEFT + width / 2 - 20, getHeight() - 15);
+        g.drawString(representation.symbol() + " (" + axisUnit + ")", LEFT + width / 2 - 20, getHeight() - 15);
         g.rotate(-Math.PI / 2);
-        g.drawString("Bλ (W·sr⁻¹·m⁻³)", -TOP - height / 2 - 45, 18);
+        g.drawString(representation.radianceLabel() + " (SI)", -TOP - height / 2 - 45, 18);
         g.rotate(Math.PI / 2);
         if (curves.isEmpty()) {
             g.drawString("Agrega una temperatura para comenzar.", LEFT + 25, TOP + height / 2);
@@ -145,7 +161,7 @@ public final class SpectrumChartPanel extends JPanel {
                 BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND, 1f, dash, 0f));
         var points = new ArrayList<Point>();
         curve.points().forEach(point -> {
-            double x = unit.fromMeters(point.independentValue());
+            double x = point.independentValue() * axisFactor;
             if (x >= minX && x <= maxX) {
                 points.add(new Point(
                         LEFT + (int) ((x - minX) / (maxX - minX) * width),
@@ -188,11 +204,12 @@ public final class SpectrumChartPanel extends JPanel {
         g.fillRoundRect(cardX, cardY, 250, cardHeight, 8, 8);
         g.setColor(new Color(75, 80, 90));
         g.drawRoundRect(cardX, cardY, 250, cardHeight, 8, 8);
-        g.drawString(String.format("λ = %.4g %s", selectedX, unit.symbol()), cardX + 10, cardY + 20);
+        g.drawString(String.format("%s = %.4g %s", representation.symbol(), selectedX, axisUnit),
+                cardX + 10, cardY + 20);
         for (int index = 0; index < curves.size(); index++) {
             SpectrumCurve curve = curves.get(index);
             SpectrumPoint closest = closestPoint(curve, selectedX);
-            double pointValue = unit.fromMeters(closest.independentValue());
+            double pointValue = closest.independentValue() * axisFactor;
             int pointX = LEFT + (int) ((pointValue - minX) / (maxX - minX) * width);
             int pointY = TOP + height - (int) (closest.radiance() / maxY * height);
             g.setColor(COLORS[index % COLORS.length]);
@@ -204,8 +221,8 @@ public final class SpectrumChartPanel extends JPanel {
 
     private SpectrumPoint closestPoint(SpectrumCurve curve, double value) {
         return curve.points().stream().min((first, second) -> Double.compare(
-                Math.abs(unit.fromMeters(first.independentValue()) - value),
-                Math.abs(unit.fromMeters(second.independentValue()) - value))).orElseThrow();
+                Math.abs(first.independentValue() * axisFactor - value),
+                Math.abs(second.independentValue() * axisFactor - value))).orElseThrow();
     }
 
     private String shortName(String name) {
@@ -238,13 +255,13 @@ public final class SpectrumChartPanel extends JPanel {
 
     private double dataMinimum() {
         return curves.stream().flatMap(curve -> curve.points().stream())
-                .mapToDouble(point -> unit.fromMeters(point.independentValue())).min().orElse(0.0);
+                .mapToDouble(point -> point.independentValue() * axisFactor).min().orElse(0.0);
     }
 
     private double dataRange() {
         double minimum = dataMinimum();
         double maximum = curves.stream().flatMap(curve -> curve.points().stream())
-                .mapToDouble(point -> unit.fromMeters(point.independentValue())).max().orElse(1.0);
+                .mapToDouble(point -> point.independentValue() * axisFactor).max().orElse(1.0);
         return Math.max(1e-12, maximum - minimum);
     }
 

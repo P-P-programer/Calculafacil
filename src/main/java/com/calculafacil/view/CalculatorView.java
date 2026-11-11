@@ -4,6 +4,7 @@ import com.calculafacil.model.LengthUnit;
 import com.calculafacil.model.TemperaturePreset;
 import com.calculafacil.model.TemperatureUnit;
 import com.calculafacil.model.SpectrumCurve;
+import com.calculafacil.model.SpectralRepresentation;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -22,7 +23,6 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
@@ -48,18 +48,21 @@ public class CalculatorView {
     private final JComboBox<TemperatureUnit> temperatureUnit = new JComboBox<>(TemperatureUnit.values());
     private final JSpinner emissivity = new JSpinner(new SpinnerNumberModel(1.0, 0.01, 1.0, 0.01));
     private final JComboBox<LengthUnit> lengthUnit = new JComboBox<>(LengthUnit.values());
-    private final JList<TemperaturePreset> presets = new JList<>(TemperaturePreset.values());
+    private final JComboBox<SpectralRepresentation> representation =
+            new JComboBox<>(SpectralRepresentation.values());
+    private final JComboBox<TemperaturePreset> presets = new JComboBox<>(TemperaturePreset.values());
     private final JButton calculate = new JButton("Agregar curva");
     private final JButton clear = new JButton("Limpiar");
     private final JLabel verification = new JLabel("Añade una curva para ver la verificación.");
     private final JCheckBox showPlanck = new JCheckBox("Planck", true);
     private final JCheckBox showRayleighJeans = new JCheckBox("Rayleigh-Jeans");
     private final JCheckBox showWien = new JCheckBox("Wien clásica");
-    private final JLabel peak = new JLabel("λmax: --");
+    private final JLabel peak = new JLabel("Máximo: --");
     private final JButton importantNotice = new JButton("♥ Aviso importante");
     private final JButton results = new JButton("Ver datos");
     private final JButton export = new JButton("Exportar CSV");
     private final JButton help = new JButton("Ayuda física");
+    private final JComboBox<String> frequencyUnit = new JComboBox<>(new String[]{"Hz", "THz"});
 
     public CalculatorView() {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -125,13 +128,14 @@ public class CalculatorView {
         addRow(panel, c, 0, "Temperatura:", temperature);
         addRow(panel, c, 1, "Escala:", temperatureUnit);
         addRow(panel, c, 2, "Emisividad ε:", emissivity);
-        addRow(panel, c, 3, "Eje λ:", lengthUnit);
+        addRow(panel, c, 3, "Unidad λ:", lengthUnit);
+        addRow(panel, c, 4, "Representación:", representation);
+        addRow(panel, c, 5, "Unidad ν:", frequencyUnit);
         c.gridx = 0;
-        c.gridy = 4;
+        c.gridy = 6;
         c.gridwidth = 2;
-        panel.add(new JLabel("Presets"), c);
-        c.gridy = 5;
-        panel.add(new JScrollPane(presets), c);
+        addRow(panel, c, 6, "Caso:", presets);
+        c.gridy = 7;
         JPanel buttons = new JPanel(new FlowLayout(FlowLayout.LEFT));
         buttons.setOpaque(false);
         buttons.add(calculate);
@@ -139,16 +143,16 @@ public class CalculatorView {
         buttons.add(results);
         buttons.add(export);
         buttons.add(help);
-        c.gridy = 6;
+        c.gridy = 8;
         panel.add(buttons, c);
-        c.gridy = 7;
+        c.gridy = 9;
         JPanel laws = new JPanel(new FlowLayout(FlowLayout.LEFT));
         laws.setOpaque(false);
         laws.add(showPlanck);
         laws.add(showRayleighJeans);
         laws.add(showWien);
         panel.add(laws, c);
-        c.gridy = 8;
+        c.gridy = 10;
         panel.add(status, c);
         return panel;
     }
@@ -164,7 +168,7 @@ public class CalculatorView {
 
     private JPanel createResults() {
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        panel.setBorder(BorderFactory.createTitledBorder("Verificación de Stefan-Boltzmann"));
+        panel.setBorder(BorderFactory.createTitledBorder("Verificación energética"));
         panel.setBackground(SURFACE);
         panel.add(peak);
         panel.add(verification);
@@ -190,8 +194,7 @@ public class CalculatorView {
         status.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(BORDER), BorderFactory.createEmptyBorder(5, 6, 5, 6)));
         presets.setBackground(Color.WHITE);
-        presets.setSelectionBackground(new Color(206, 230, 236));
-        presets.setSelectionForeground(GRAPHITE);
+        presets.setToolTipText("Selecciona un caso de referencia para cargar su temperatura.");
         verification.setForeground(SLATE);
         peak.setForeground(PETROLEUM);
         peak.setFont(peak.getFont().deriveFont(Font.BOLD));
@@ -230,7 +233,15 @@ public class CalculatorView {
         return lengthUnit;
     }
 
-    public JList<TemperaturePreset> presets() {
+    public JComboBox<SpectralRepresentation> representation() {
+        return representation;
+    }
+
+    public JComboBox<String> frequencyUnit() {
+        return frequencyUnit;
+    }
+
+    public JComboBox<TemperaturePreset> presets() {
         return presets;
     }
 
@@ -282,13 +293,13 @@ public class CalculatorView {
         return help;
     }
 
-    public void showDataTable(List<SpectrumCurve> curves, LengthUnit unit) {
+    public void showDataTable(List<SpectrumCurve> curves, String axisLabel, double axisFactor) {
         if (curves.isEmpty()) {
-            setTip("Agrega al menos una curva antes de consultar sus datos.");
+            alert("Primero debes agregar al menos una curva para consultar sus datos.");
             return;
         }
         String[] columns = new String[curves.size() + 1];
-        columns[0] = "λ (" + unit.symbol() + ")";
+        columns[0] = axisLabel;
         for (int index = 0; index < curves.size(); index++) {
             columns[index + 1] = curves.get(index).name();
         }
@@ -296,7 +307,8 @@ public class CalculatorView {
         int rows = curves.get(0).points().size();
         for (int row = 0; row < rows; row++) {
             Object[] values = new Object[columns.length];
-            values[0] = String.format("%.6g", unit.fromMeters(curves.get(0).points().get(row).independentValue()));
+            values[0] = String.format("%.6g",
+                    curves.get(0).points().get(row).independentValue() * axisFactor);
             for (int curve = 0; curve < curves.size(); curve++) {
                 values[curve + 1] = String.format("%.6g", curves.get(curve).points().get(row).radiance());
             }
@@ -315,8 +327,10 @@ public class CalculatorView {
         JTextArea text = new JTextArea("""
                 ¿Qué estás viendo?
 
-                Planck (Bλ) describe la radiancia espectral de un cuerpo negro.
-                λmax = b/T indica la longitud de onda del máximo.
+                Planck puede verse como Bλ (por longitud de onda) o Bν (por frecuencia).
+                Son distribuciones distintas: al cambiar la representación se recalculan
+                las curvas, no se cambia solamente la etiqueta del eje.
+                En Bλ, λmax = b/T indica la longitud de onda del máximo.
 
                 Comparaciones históricas:
                 • Rayleigh-Jeans funciona en longitudes de onda grandes, pero diverge
@@ -331,12 +345,20 @@ public class CalculatorView {
 
                 Unidades:
                 • La longitud de onda se calcula internamente en metros.
+                • La frecuencia se calcula internamente en Hz y puede mostrarse en Hz o THz.
                 • La temperatura física se convierte internamente a kelvin.
                 • ε=1 es cuerpo negro; ε<1 es cuerpo gris.
 
                 Stefan-Boltzmann:
-                La integral de Bλ se multiplica por π para integrar la radiancia
-                sobre el hemisferio emisor y compararla con εσT⁴.
+                La integral suma numéricamente la radiancia Bλ en todo el rango
+                de longitudes de onda. Como Bλ es radiancia por estereorradián,
+                se multiplica por π para obtener la potencia emitida por unidad
+                de área y compararla con εσT⁴.
+                La aplicación muestra el valor obtenido, el valor teórico y el
+                error relativo entre ambos. Un error pequeño indica que el
+                muestreo y la integración reproducen correctamente la ley.
+                Esta verificación energética se realiza en Bλ, aunque estés
+                visualizando Bν.
                 """);
         text.setEditable(false);
         text.setLineWrap(true);
@@ -352,6 +374,12 @@ public class CalculatorView {
 
     public void setTip(String message) {
         tip.setText("  Consejo: " + message);
+    }
+
+    public void alert(String message) {
+        java.awt.Toolkit.getDefaultToolkit().beep();
+        status.setText(message);
+        setTip(message);
     }
 
     private void showImportantNotice() {

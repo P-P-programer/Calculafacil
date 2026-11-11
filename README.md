@@ -27,8 +27,11 @@ Java y no requieren una instalación adicional.
   - Filamento: 2900 K
 - Temperatura en K, °C o °F.
 - Longitud de onda en m, µm o nm.
+- Representación espectral seleccionable: `Bλ` por longitud de onda o `Bν` por
+  frecuencia, con frecuencia en Hz o THz.
 - Modo cuerpo gris mediante emisividad `ε`, con `0 < ε ≤ 1`.
-- Cálculo y visualización de `λmax = b/T`.
+- Cálculo y visualización de `λmax = b/T` en `Bλ`; en `Bν` se muestra el
+  máximo de la curva de frecuencia.
 - Verificación numérica de Stefan-Boltzmann.
 - Zoom alrededor del cursor y desplazamiento horizontal por arrastre.
 - Línea de referencia, marcadores y tarjeta de valores al mover el cursor.
@@ -55,7 +58,9 @@ explica el siguiente paso recomendado.
 
 ## Interpretación física
 
-La aplicación representa `Bλ`, la radiancia espectral por longitud de onda:
+La aplicación permite dos representaciones físicas:
+
+`Bλ`, radiancia espectral por longitud de onda:
 
 ```text
 Bλ = 2hc² / [λ⁵ (exp(hc/(λkT)) - 1)]
@@ -67,6 +72,11 @@ Wien:
 ```text
 λmax = b / T
 ```
+
+`Bν`, radiancia espectral por frecuencia, se recalcula con la ley de Planck
+expresada en frecuencia. No es correcto convertir visualmente los valores de
+`Bλ` para simular `Bν`, porque ambas densidades espectrales tienen variables
+independientes diferentes.
 
 Las comparaciones históricas sirven para visualizar que:
 

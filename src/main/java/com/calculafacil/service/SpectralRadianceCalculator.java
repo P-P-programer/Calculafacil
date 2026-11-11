@@ -38,6 +38,22 @@ public final class SpectralRadianceCalculator {
         return emissivity.value() * safePlanckNumeratorWavelength(wavelengthMeters) * Math.exp(-exponent);
     }
 
+    public double rayleighJeansByFrequency(double frequencyHertz, Temperature temperature, Emissivity emissivity) {
+        validatePositiveFinite(frequencyHertz, "La frecuencia");
+        return emissivity.value() * 2.0 * PhysicalConstants.BOLTZMANN
+                * temperature.kelvin() * Math.pow(frequencyHertz, 2)
+                / (PhysicalConstants.SPEED_OF_LIGHT * PhysicalConstants.SPEED_OF_LIGHT);
+    }
+
+    public double wienByFrequency(double frequencyHertz, Temperature temperature, Emissivity emissivity) {
+        validatePositiveFinite(frequencyHertz, "La frecuencia");
+        double exponent = PhysicalConstants.PLANCK * frequencyHertz
+                / (PhysicalConstants.BOLTZMANN * temperature.kelvin());
+        return emissivity.value() * 2.0 * PhysicalConstants.PLANCK * Math.pow(frequencyHertz, 3)
+                / (PhysicalConstants.SPEED_OF_LIGHT * PhysicalConstants.SPEED_OF_LIGHT)
+                * Math.exp(-exponent);
+    }
+
     private double safePlanckNumeratorWavelength(double wavelengthMeters) {
         return 2.0 * PhysicalConstants.PLANCK * PhysicalConstants.SPEED_OF_LIGHT
                 * PhysicalConstants.SPEED_OF_LIGHT / Math.pow(wavelengthMeters, 5);
